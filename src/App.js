@@ -1,7 +1,9 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import { API } from "./api/api";
-
+import Header from "./components/Header";
+import Context from "./Context/Context";
+import PaginationContainer from "./components/Pagination/PaginationContainer";
 function App() {
   let [items, setItems] = useState([]);
   let [offset, setOffset] = useState(0);
@@ -9,15 +11,15 @@ function App() {
 
   useEffect(() => {
     API.getItemIds(offset)
-      .then((data) => API.getItems(data.data.result))
       .then((data) => {
-        const uniq = () => {
+        return API.getItems(data.data.result);
+      })
+      .then((data) => {
+        (() => {
           data.data.result.map((el) => (result[el.id] = el));
           return Object.values(result);
-        };
-        uniq();
+        })();
         setItems(result);
-        console.log(data.data.result);
       });
 
     // (async () => {
@@ -25,28 +27,19 @@ function App() {
     //   const itemsResponse = await API.getItems(response.data.result);
     //   setItems(itemsResponse.data.result);
     // })();
-
-    console.log(items);
   }, [offset]);
+  const valueContext = {
+    setOffset,
+  };
 
   return (
-    <div>
-      <pre>{JSON.stringify(items, null, 2)}</pre>
-      <button
-        onClick={() => {
-          setOffset((prevOffSet) => prevOffSet - 5);
-        }}
-      >
-        {"<"}
-      </button>
-      <button
-        onClick={() => {
-          setOffset((prevOffSet) => prevOffSet + 5);
-        }}
-      >
-        {">"}
-      </button>
-    </div>
+    <Context.Provider value={valueContext}>
+      <div>
+        <Header />
+        <pre>{JSON.stringify(items, null, 2)}</pre>
+        <PaginationContainer/>
+      </div>
+    </Context.Provider>
   );
 }
 
