@@ -4,7 +4,7 @@ import { Toolbar, Typography } from "@mui/material";
 
 const Header = () => {
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#263238" }}>
+    <AppBar position="static" sx={{ backgroundColor: "#263238" , mb: "2rem"}}>
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Valantis

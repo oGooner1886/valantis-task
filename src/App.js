@@ -4,6 +4,8 @@ import { API } from "./api/api";
 import Header from "./components/Header";
 import Context from "./Context/Context";
 import PaginationContainer from "./components/Pagination/PaginationContainer";
+import { Container } from "@mui/material";
+import GoodsList from "./components/GoodsList/GoodsList";
 function App() {
   let [items, setItems] = useState([]);
   let [offset, setOffset] = useState(0);
@@ -29,16 +31,18 @@ function App() {
     // })();
   }, [offset]);
   const valueContext = {
+    items,
     setOffset,
   };
 
   return (
     <Context.Provider value={valueContext}>
-      <div>
-        <Header />
-        <pre>{JSON.stringify(items, null, 2)}</pre>
-        <PaginationContainer/>
-      </div>
+      <Header />
+      <Container>
+        <GoodsList />
+        {/* <pre>{JSON.stringify(items, null, 2)}</pre> */}
+        <PaginationContainer />
+      </Container>
     </Context.Provider>
   );
 }
