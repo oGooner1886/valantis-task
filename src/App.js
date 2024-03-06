@@ -6,11 +6,12 @@ import Context from "./Context/Context";
 import PaginationContainer from "./components/Pagination/PaginationContainer";
 import { Container } from "@mui/material";
 import GoodsList from "./components/GoodsList/GoodsList";
+import ButtonOnUp from "./components/ButtonOnUp";
 function App() {
   let [items, setItems] = useState([]);
   let [offset, setOffset] = useState(0);
   let result = {};
-
+  
   useEffect(() => {
     API.getItemIds(offset)
       .then((data) => {

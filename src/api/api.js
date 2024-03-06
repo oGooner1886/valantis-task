@@ -14,7 +14,7 @@ export const API = {
       action: "get_ids",
       params: {
         offset,
-        limit: 5,
+        limit: 50,
       },
     });
   },
