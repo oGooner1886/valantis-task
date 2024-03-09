@@ -8,8 +8,8 @@ const GoodsList = () => {
   const { items } = value;
   return (
     <Grid container spacing={2}>
-      {Object.entries(items).map(([key, item]) => {
-        return <GoodsItem key={key} item={item} />;
+      {items.map((item) => {
+        return <GoodsItem key={item.id} item={item} />;
       })}
     </Grid>
   );

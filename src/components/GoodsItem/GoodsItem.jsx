@@ -4,7 +4,7 @@ import React from "react";
 const GoodsItem = ({ item }) => {
   const { brand, id, price, product } = item;
   return (
-    <Grid item xs="12" sm="6" md="4">
+    <Grid item xs={12} sm={6} md={4}>
       <Card sx={{ height: "100%" }}>
         <CardMedia
           component="img"
