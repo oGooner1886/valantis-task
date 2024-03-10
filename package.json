@@ -1,6 +1,7 @@
 {
   "name": "valantis-task",
   "version": "0.1.0",
+  "homepage": "https://ogooner1886.github.io/valantis-task/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.4",
