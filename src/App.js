@@ -10,107 +10,124 @@ import Preloader from "./components/Preloader/Preloader";
 function App() {
   const [items, setItems] = useState([]);
   const [brands, setBrands] = useState([]);
+
+  const [filteredItems, setFilteredItems] = useState([]);
+  const [filtered, setFiltered] = useState(false);
+  const [listItems, setListItems] = useState(50);
+
   const [offset, setOffset] = useState(0);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-  const [filtered, setFiltered] = useState(false);
+
   const [qtyItems, setQtyItems] = useState(0);
-  const [listItems, setListItems] = useState(10);
-  const pages = Math.ceil(qtyItems / 50);
+
+  const step = 50;
+  const pages = Math.ceil(qtyItems / step);
+  const filteredPages = Math.ceil(qtyItems / step);
+  const paginItems = filteredItems.slice(listItems - 50, listItems);
 
   useEffect(() => {
     let sortBrand;
     let product;
-    let list;
-    API.getItemIds(offset)
-      .then((data) => {
-        setLoading(true);
-        return API.getItems(data.data.result);
-      })
-      .then((data) => {
-        (() => {
-          product = [
-            ...new Map(data.data.result.map((el) => [el.id, el])).values(),
-          ];
-        })();
-        setItems(product);
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.message === "500") {
-          API.getItemIds();
-        }
-      });
+
+    !filtered &&
+      API.getItemIds(offset)
+        .then((data) => {
+          setLoading(true);
+          return API.getItems(data.data.result);
+        })
+        .then((data) => {
+          (() => {
+            product = [
+              ...new Map(data.data.result.map((el) => [el.id, el])).values(),
+            ];
+          })();
+          setItems(product);
+        })
+        .catch((err) => {
+          console.log(err);
+          if (err.response.status === 500) {
+            API.getItemIds();
+          }
+        });
 
     API.getQtyItems().then((data) => {
       setQtyItems(data.data.result.length);
     });
 
-    // API.getFields().then((data) => {
-    //   (() => {
-    //     sortBrand = data.data.result.reduce((acc, item) => {
-    //       if (acc.includes(item)) {
-    //         return acc;
-    //       }
-    //       return [...acc, item];
-    //     }, []);
-    //     setBrands(sortBrand);
-    //   })();
-    // });
+    API.getFields().then((data) => {
+      console.log(data);
+      
+      (() => {
+        sortBrand = data.data.result.reduce((acc, item) => {
+          if (acc.includes(item)) {
+            return acc;
+          }
+          return [...acc, item];
+        }, []);
+        console.log(sortBrand);
+        
+        // setBrands(sortBrand);
+      })();
+    });
     // (async () => {
     //   const response = await API.getItemIds(offset);
     //   const itemsResponse = await API.getItems(response.data.result);
     //   setItems(itemsResponse.data.result);
     // })();
-  }, [offset]);
+  }, [offset, filtered]);
 
   useEffect(() => {
     let product;
-    let list;
-    API.getFilter(search)
-      .then((data) => {
-        return API.getItems(data.data.result);
-      })
-      .then((data) => {
-        setFiltered(true);
-        (() => {
-          product = [
-            ...new Map(data.data.result.map((el) => [el.id, el])).values(),
-          ];
-          list = product.slice(0, listItems);
-        })();
-        console.log(list);
-        setItems(list);
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.message === "500") {
-          API.getFilter(search);
-        }
-      });
-  }, [search, listItems]);
+    !!filtered &&
+      API.getFilter(search)
+        .then((data) => {
+          setLoading(true);
+          return API.getItems(data.data.result);
+        })
+        .then((data) => {
+          (() => {
+            product = [
+              ...new Map(data.data.result.map((el) => [el.id, el])).values(),
+            ];
+          })();
+          setFilteredItems(product);
+          setQtyItems(product.length);
+        })
+
+        .catch((err) => {
+          console.log(err);
+          if (err.message) {
+            API.getFilter(search);
+          }
+        });
+  }, [search, filtered, qtyItems]);
 
   const handleChange = (e) => {
-    // e.preventDefault();
     if (!e.target.value) {
       setItems(items);
       setSearch("");
+      setFiltered(false);
       return;
     }
+    setFiltered(true);
     setSearch(e.target.value);
   };
-  const handleShowNextPage = () => {
-    setListItems(listItems + 10);
+
+  const handleShowNextPage = (n) => {
+    setListItems(n * step);
   };
+
   const valueContext = {
     items,
     setOffset,
     brands,
     search,
     handleChange,
-    handleShowNextPage,
+    filtered,
+    filteredItems,
+    paginItems,
   };
-
   return (
     <Context.Provider value={valueContext}>
       <Header />
@@ -125,7 +142,15 @@ function App() {
             <Pagination
               color="primary"
               count={pages}
-              onChange={() => setOffset(50)}
+              onChange={(_, n) => setOffset(step * (n - 1))}
+              sx={{ display: "flex", justifyContent: "center", m: "25px 0 " }}
+            />
+          )}
+          {!!filtered && (
+            <Pagination
+              color="primary"
+              count={filteredPages}
+              onChange={(_, n) => handleShowNextPage(n)}
               sx={{ display: "flex", justifyContent: "center", m: "25px 0 " }}
             />
           )}

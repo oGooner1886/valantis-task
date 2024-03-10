@@ -2,7 +2,7 @@ import axios from "axios";
 import { secretKey } from "./apiKey";
 
 export const instance = axios.create({
-  baseURL: "http://api.valantis.store:40000",
+  baseURL: "https://api.valantis.store:41000",
   headers: {
     "X-Auth": secretKey,
     "Content-Type": "application/json;charset=utf-8",
@@ -32,7 +32,9 @@ export const API = {
   getFields() {
     return instance.post("/", {
       action: "get_fields",
-      params: { field: "brand" },
+      params: { 
+        field: "brand"
+       },
     });
   },
   getFilter(search) {

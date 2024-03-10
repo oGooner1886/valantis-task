@@ -5,12 +5,20 @@ import GoodsItem from "../GoodsItem/GoodsItem";
 
 const GoodsList = () => {
   const value = useContext(Context);
-  const { items } = value;
+  const { items, filtered, paginItems } = value;
+  // const paginItems = filteredItems.slice(0, 50);
+
+  
   return (
     <Grid container spacing={2}>
-      {items.map((item) => {
-        return <GoodsItem key={item.id} item={item} />;
-      })}
+      {filtered &&
+        paginItems.map((item) => {
+          return <GoodsItem key={item.id} item={item} />;
+        })}
+      {!filtered &&
+        items.map((item) => {
+          return <GoodsItem key={item.id} item={item} />;
+        })}
     </Grid>
   );
 };
