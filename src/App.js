@@ -18,6 +18,8 @@ function App() {
   const [offset, setOffset] = useState(0);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
 
   const [qtyItems, setQtyItems] = useState(0);
 
@@ -55,26 +57,24 @@ function App() {
       setQtyItems(data.data.result.length);
     });
 
-    API.getFields().then((data) => {
-      console.log(data);
-      
-      (() => {
-        sortBrand = data.data.result.reduce((acc, item) => {
-          if (acc.includes(item)) {
-            return acc;
-          }
-          return [...acc, item];
-        }, []);
-        console.log(sortBrand);
-        
-        // setBrands(sortBrand);
-      })();
-    });
-    // (async () => {
-    //   const response = await API.getItemIds(offset);
-    //   const itemsResponse = await API.getItems(response.data.result);
-    //   setItems(itemsResponse.data.result);
-    // })();
+    API.getFields()
+      .then((data) => {
+        (() => {
+          sortBrand = data.data.result.reduce((acc, item) => {
+            if (acc.includes(item)) {
+              return acc;
+            }
+            return [...acc, item];
+          }, []);
+          setBrands(sortBrand);
+        })();
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response.status === 500) {
+          API.getItemIds();
+        }
+      });
   }, [offset, filtered]);
 
   useEffect(() => {
@@ -104,6 +104,8 @@ function App() {
   }, [search, filtered, qtyItems]);
 
   const handleChange = (e) => {
+    console.log(e);
+
     if (!e.target.value) {
       setItems(items);
       setSearch("");
@@ -118,6 +120,9 @@ function App() {
     setListItems(n * step);
   };
 
+  const toggleDrawer = (newOpen) => {
+    setOpen(newOpen);
+  };
   const valueContext = {
     items,
     setOffset,
@@ -127,11 +132,12 @@ function App() {
     filtered,
     filteredItems,
     paginItems,
+    open,
+    toggleDrawer
   };
   return (
     <Context.Provider value={valueContext}>
       <Header />
-
       {loading && items.length === 0 ? (
         <Preloader />
       ) : (
