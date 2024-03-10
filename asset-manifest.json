@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/valantis-task/static/css/main.ea0cb664.css",
+    "main.js": "/valantis-task/static/js/main.21e4a33a.js",
+    "index.html": "/valantis-task/index.html",
+    "main.ea0cb664.css.map": "/valantis-task/static/css/main.ea0cb664.css.map",
+    "main.21e4a33a.js.map": "/valantis-task/static/js/main.21e4a33a.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ea0cb664.css",
+    "static/js/main.21e4a33a.js"
+  ]
+}
