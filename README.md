@@ -28,7 +28,7 @@
 </br>
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 
-####UI реализован с помощью библиотеки 
+#### UI реализован с помощью библиотеки 
 </br>
 ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 </br>
