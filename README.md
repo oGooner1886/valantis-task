@@ -25,9 +25,14 @@
  [![React][React.js]][React-url]
  </br>
 ![Context-API](https://img.shields.io/badge/Context--Api-000000?style=for-the-badge&logo=react)
- > Для UI использовалась библиотека 'Material UI' (Styled components)
-> </br>
- > REST  -  AXIOS
+</br>
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+
+####UI реализован с помощью библиотеки 
+</br>
+![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
+</br>
+REST API  -  AXIOS
 
 
 
